@@ -101,7 +101,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
   // check for valid inputs and valid session
   if (!name || !phrase || !password) {
     error = 'All fields are required';
-  } else if (phrase !== 'please delete my account forever') {
+  } else if (phrase !== 'DELETE ACCOUNT') {
     error = 'Phrase doesn\'t match';
   } else if (req.session.name !== name) {
     error = 'Please enter your username';
