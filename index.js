@@ -92,19 +92,19 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
   var that = this;
 
   // verify input fields
-  var name = req.body.name;
+  var email = req.body.email;
   var phrase = req.body.phrase;
   var password = req.body.password;
 
   var error = null;
 
   // check for valid inputs and valid session
-  if (!name || !phrase || !password) {
+  if (!email || !phrase || !password) {
     error = 'All fields are required';
   } else if (phrase !== 'DELETE ACCOUNT') {
     error = 'Phrase doesn\'t match';
-  } else if (req.session.name !== name) {
-    error = 'Please enter your username';
+  } else if (req.session.email !== email) {
+    error = 'Please enter your email address';
   }
 
   // custom or built-in view
@@ -123,8 +123,10 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
     return;
   }
 
+console.log('postDelete', email, phrase, password);
+
   // get user from db
-  adapter.find('name', name, function(err, user) {
+  adapter.find('email', email, function(err, user) {
     if (err) return next(err);
 
     // no need to check if user exists in db since we are already checking against current session
@@ -154,7 +156,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
       }
 
       // delete user from db :(
-      adapter.remove(name, function(err) {
+      adapter.remove(user.name, function(err) {
         if (err) return next(err);
 
         // kill session
