@@ -123,8 +123,6 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
     return;
   }
 
-console.log('postDelete', email, phrase, password);
-
   // get user from db
   adapter.find('email', email, function(err, user) {
     if (err) return next(err);
