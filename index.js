@@ -103,7 +103,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
     error = 'All fields are required';
   } else if (phrase !== 'DELETE ACCOUNT') {
     error = 'Phrase doesn\'t match';
-  } else if (req.session.email !== email) {
+  } else if (req.user !== undefined && req.user.email !== undefined && req.user.email !== email) {
     error = 'Please enter your email address';
   }
 
@@ -161,7 +161,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
         utils.destroy(req, function() {
 
           // emit 'delete' event
-          that.emit('delete', user, res);
+          that.emit('delete', user, res, req);
 
           if (config.deleteAccount.handleResponse) {
 
