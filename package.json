@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "couch-pwd": "0.0.1",
-    "lockit-utils": "git://github.com/killerbobjr/lockit-utilities.git",
+    "lockit-utils": "git://github.com/killerbobjr/lockit-utilities.git"
   },
   "devDependencies": {
     "cookie": "^0.1.2",
