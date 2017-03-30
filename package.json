@@ -26,21 +26,21 @@
     "lockit-utils": "git://github.com/killerbobjr/lockit-utilities.git"
   },
   "devDependencies": {
-    "cookie": "^0.1.2",
+    "cookie": "^0.3.1",
     "static-favicon": "^2.0.0-alpha",
-    "errorhandler": "^1.0.1",
-    "cookie-parser": "^1.1.0",
-    "csurf": "^1.2.0",
-    "cookie-session": "^1.0.2",
-    "lockit-couchdb-adapter": "^0.4.3",
-    "supertest": "^0.13.0",
-    "grunt-mocha-test": "^0.10.2",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.10.0",
-    "nano": "^5.9.1",
-    "jade": "^1.3.1",
-    "should": "^3.3.2",
-    "body-parser": "^1.2.2",
-    "express": "^4.3.1"
+    "errorhandler": "^1.5.0",
+    "cookie-parser": "^1.4.3",
+    "csurf": "^1.9.0",
+    "cookie-session": "^2.0.0-beta.1",
+    "lockit-couchdb-adapter": "git://github.com/killerbobjr/lockit-couchdb-adapter.git",
+    "supertest": "^3.0.0",
+    "grunt-mocha-test": "^0.13.2",
+    "grunt": "^1.0.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "nano": "^6.2.0",
+    "jade": "^1.11.0",
+    "should": "^11.2.1",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2"
   }
 }
