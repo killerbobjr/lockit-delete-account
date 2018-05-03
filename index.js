@@ -125,12 +125,14 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
 
   // get user from db
   adapter.find('email', email, function(err, user) {
-    if (err) return next(err);
+    if (err)
+		return next(err);
 
     // no need to check if user exists in db since we are already checking against current session
 
     // if user comes from couchdb it has an 'iterations' key
-    if (user.iterations) pwd.iterations(user.iterations);
+    if (user.iterations)
+		pwd.iterations(user.iterations);
 
     // verify user password
     pwd.hash(password, user.salt, function(err, hash) {
@@ -153,9 +155,12 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
 
       }
 
-      // delete user from db :(
-      adapter.remove(user.name, function(err) {
-        if (err) return next(err);
+      // invalidate user in db
+	  user.accountLocked = true;
+	  user.accountInvalid = true;
+      adapter.update(user, function(err) {
+        if (err)
+			return next(err);
 
         // kill session
         utils.destroy(req, function() {
@@ -166,7 +171,8 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
           if (config.deleteAccount.handleResponse) {
 
             // do not handle the route when REST is active
-            if (config.rest) return res.send(204);
+            if (config.rest) 
+				return res.send(204);
 
             view = config.deleteAccount.views.removed || join('post-delete-account');
 
