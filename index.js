@@ -123,6 +123,14 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
     return;
   }
 
+
+	// Custom for our app
+	var	basequery = {};
+	if(res.locals && res.locals.basequery)
+	{
+		basequery = res.locals.basequery;
+	}
+
   // get user from db
   adapter.find('email', email, function(err, user) {
     if (err)
@@ -190,5 +198,5 @@ DeleteAccount.prototype.postDelete = function(req, res, next) {
 
     });
 
-  });
+  }, basequery);
 };
