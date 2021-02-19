@@ -20,21 +20,20 @@ var DeleteAccount = module.exports = function(cfg, adapter)
 		return new DeleteAccount(cfg, adapter);
 	}
 
-	this.config = cfg.deleteAccount;
+	this.config = cfg;
 	this.adapter = adapter;
-
 	var	config = this.config;
 
 	// call super constructor function
 	events.EventEmitter.call(this);
 
 	// set default route
-	var route = config.route || '/deleteaccount';
+	var route = config.deleteAccount.route || '/deleteaccount';
 
 	// add prefix when rest is active
 	if(config.rest) 
 	{
-		route = '/' + config.rest + route;
+		route = '/' + config.rest.route + route;
 	}
 
 	/**
@@ -65,9 +64,9 @@ DeleteAccount.prototype.sendResponse = function(err, view, user, json, req, res,
 {
 	var	config = this.config;
 
-	this.emit((config.eventmsg || config.route), err, view, user, res);
+	this.emit((config.deleteAccount.eventMessage || 'DeleteAccount'), err, view, user, res);
 	
-	if(config.handleResponse)
+	if(config.deleteAccount.handleResponse)
 	{
 		// do not handle the route when REST is active
 		if(config.rest)
@@ -85,7 +84,7 @@ DeleteAccount.prototype.sendResponse = function(err, view, user, json, req, res,
 		{
 			// custom or built-in view
 			var	resp = {
-					title: config.title || 'Delete Account',
+					title: config.deleteAccount.title || 'Delete Account',
 					basedir: req.app.get('views')
 				};
 				
@@ -123,7 +122,7 @@ DeleteAccount.prototype.sendResponse = function(err, view, user, json, req, res,
 DeleteAccount.prototype.getDelete = function(req, res, next)
 {
 	var config = this.config;
-	this.sendResponse(undefined, config.views.remove, undefined, {result:true}, req, res, next);
+	this.sendResponse(undefined, config.deleteAccount.views.remove, undefined, {result:true}, req, res, next);
 };
 
 
@@ -161,7 +160,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 
 	if(error)
 	{
-		that.sendResponse({message:error}, config.views.remove, req.user, {result:true}, req, res, next);
+		that.sendResponse({message:error}, config.deleteAccount.views.remove, req.user, {result:true}, req, res, next);
 	}
 	else
 	{
@@ -201,7 +200,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 								// compare hash with hash from db
 								if(hash !== user.derived_key)
 								{
-									that.sendResponse({message:'The password is incorrect'}, config.views.remove, user, {result:true}, req, res, next);
+									that.sendResponse({message:'The password is incorrect'}, config.deleteAccount.views.remove, user, {result:true}, req, res, next);
 								}
 								else
 								{
@@ -220,7 +219,32 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 												// kill session
 												utils.destroy(req, function()
 													{
-														that.sendResponse(undefined, config.views.removed, user, {result:true}, req, res, next);
+														if(config.deleteAccount.completionRoute)
+														{
+															if(typeof config.deleteAccount.completionRoute === 'function')
+															{
+																config.deleteAccount.completionRoute(user, req, res, function(err, req, res)
+																	{
+																		if(err)
+																		{
+																			next(err);
+																		}
+																		else
+																		{
+																			that.sendResponse(undefined, req.query.redirect?undefined:config.deleteAccount.views.removed, user, {result:true}, req.query.redirect, req, res, next);
+																		}
+																	});
+															}
+															else
+															{
+																that.sendResponse(undefined, undefined, user, {result:true}, config.deleteAccount.completionRoute, req, res, next);
+															}
+														}
+														else
+														{
+															that.sendResponse(undefined, config.deleteAccount.views.removed, user, {result:true}, undefined, req, res, next);
+														}
+														
 													});
 											}
 										});
