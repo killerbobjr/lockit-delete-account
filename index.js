@@ -69,14 +69,24 @@ DeleteAccount.prototype.sendResponse = function(err, view, user, json, req, res,
 	if(config.deleteAccount.handleResponse)
 	{
 		// do not handle the route when REST is active
-		if(config.rest)
+		if(config.rest || req.query.rest)
 		{
 			if(err)
 			{
-				res.status(403).json(err);
+				// Duplicate to make it easy for REST
+				// response handlers to detect
+				if(!err.error)
+				{
+					err.error = err.message;
+				}
+				res.json(err);
 			}
 			else
 			{
+				if(redirect)
+				{
+					json.redirect = redirect;
+				}
 				res.json(json);
 			}
 		}
@@ -122,7 +132,7 @@ DeleteAccount.prototype.sendResponse = function(err, view, user, json, req, res,
 DeleteAccount.prototype.getDelete = function(req, res, next)
 {
 	var config = this.config;
-	this.sendResponse(undefined, config.deleteAccount.views.remove, undefined, {result:true}, req, res, next);
+	this.sendResponse(undefined, config.deleteAccount.views.remove, undefined, {view:'remove'}, req, res, next);
 };
 
 
@@ -160,7 +170,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 
 	if(error)
 	{
-		that.sendResponse({message:error}, config.deleteAccount.views.remove, req.user, {result:true}, req, res, next);
+		that.sendResponse({message:error}, config.deleteAccount.views.remove, req.user, {view:'remove'}, req, res, next);
 	}
 	else
 	{
@@ -200,7 +210,7 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 								// compare hash with hash from db
 								if(hash !== user.derived_key)
 								{
-									that.sendResponse({message:'The password is incorrect'}, config.deleteAccount.views.remove, user, {result:true}, req, res, next);
+									that.sendResponse({message:'The password is incorrect'}, config.deleteAccount.views.remove, user, {view:'remove'}, req, res, next);
 								}
 								else
 								{
@@ -231,18 +241,18 @@ DeleteAccount.prototype.postDelete = function(req, res, next)
 																		}
 																		else
 																		{
-																			that.sendResponse(undefined, req.query.redirect?undefined:config.deleteAccount.views.removed, user, {result:true}, req.query.redirect, req, res, next);
+																			that.sendResponse(undefined, req.query.redirect?undefined:config.deleteAccount.views.removed, user, {view:'removed'}, req.query.redirect, req, res, next);
 																		}
 																	});
 															}
 															else
 															{
-																that.sendResponse(undefined, undefined, user, {result:true}, config.deleteAccount.completionRoute, req, res, next);
+																that.sendResponse(undefined, undefined, user, {view:'removed'}, config.deleteAccount.completionRoute, req, res, next);
 															}
 														}
 														else
 														{
-															that.sendResponse(undefined, config.deleteAccount.views.removed, user, {result:true}, undefined, req, res, next);
+															that.sendResponse(undefined, config.deleteAccount.views.removed, user, {view:'removed'}, undefined, req, res, next);
 														}
 														
 													});
