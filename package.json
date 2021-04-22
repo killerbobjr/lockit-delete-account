@@ -1,7 +1,7 @@
 {
   "name": "lockit-delete-account",
   "version": "1.0.3",
-  "description": "delete account middleware for lockit",
+  "description": "delete account middleware for lockit, legacy version",
   "main": "index.js",
   "scripts": {
     "test": "grunt"
@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "couch-pwd": "git://github.com/zemirco/couch-pwd.git",
-    "lockit-utils": "git://github.com/killerbobjr/lockit-utilities.git"
+    "lockit-utils": "git://github.com/killerbobjr/lockit-utilities.git#legacy"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
@@ -37,7 +37,7 @@
     "grunt-contrib-jshint": "^2.1.0",
     "grunt-mocha-test": "^0.13.3",
     "pug": "^2.0.4",
-    "lockit-couchdb-adapter": "git://github.com/killerbobjr/lockit-couchdb-adapter.git",
+    "lockit-couchdb-adapter": "git://github.com/killerbobjr/lockit-couchdb-adapter.git#legacy",
     "nano": "^8.1.0",
     "should": "^13.2.3",
     "static-favicon": "^2.0.0-alpha",
